@@ -14,10 +14,10 @@ namespace FarmControllerSpace
         private bool Pump1Running;
         public DateTime PumpEndTime { get; internal set; }
         public DateTime PumpStartTime { get; internal set; }
+        public int PumpDuration { get; internal set; }
         private const int LED_PIN = 3;
         private GpioPin pin;
         private GpioPinValue pinValue;
-        private DispatcherTimer timer;
         private SolidColorBrush redBrush = new SolidColorBrush(Windows.UI.Colors.Red);
         private SolidColorBrush grayBrush = new SolidColorBrush(Windows.UI.Colors.LightGray);
         private SolidColorBrush greenBrush = new SolidColorBrush(Windows.UI.Colors.LightGreen);
@@ -52,6 +52,15 @@ namespace FarmControllerSpace
 
         }
 
+        public void UpdatePumpControls()
+        {
+            if (PumpEndTime <= DateTime.Now)
+            {
+                StopPump();
+                Pump1Running = false;
+            }
+
+        }
 
         public bool isPumpRunning()
         {
@@ -66,10 +75,21 @@ namespace FarmControllerSpace
 
        public void StartPump(int duration)
         {
-            PumpStartTime = DateTime.Now;
-            PumpEndTime = PumpStartTime.AddMinutes(duration);
-            Pump1Running = true;
-            pin.Write(GpioPinValue.Low);
+
+            if (duration>0)
+            {
+                PumpStartTime = DateTime.Now;
+                PumpEndTime = PumpStartTime.AddMinutes(duration);
+                Pump1Running = true;
+                pin.Write(GpioPinValue.Low);
+                PumpDuration = duration;
+
+            }
+            else
+            {
+                StopPump();
+            }
+
 
         }
 

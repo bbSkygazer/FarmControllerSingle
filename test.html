@@ -1,0 +1,29 @@
+<html><head><title>Farm Controller</title></head><body><H1>Current Time : 18/02/2017 02:33:16 PM<br>Pump Status: Stopped<br><br>
+                <form action="/" method="post">
+                    <fieldset>
+                        <legend>Pump Start Controls</legend>
+                            Pump: <input type = "readonly" name = "PumpName" value = "Pump1">
+                            Duration in Minutes: <input type = "text" name = "Duration" value = "20">
+                            <br><br>
+                            <input type="hidden" name= "Action" value="Start">
+                            <input type = "submit" value = "Start"  style="height:50px; width:100px; font-size: 25px">
+                    </fieldset>
+                </form>
+                <br>
+                <form action="/" method="post">
+                    <fieldset>
+                        <legend>Pump Stop Controls</legend>
+                            Pump: <input type = "readonly" name = "PumpName" value = "Pump1">
+                            <input type="hidden" name= "Action" value="Stop">
+                            <br><br>
+                            <input type = "submit" value = "Stop"  style="height:50px; width:100px; font-size: 25px">
+                    </fieldset>
+               </form>
+                <br>
+                 <form action="/" method="post">
+                    <fieldset>
+                        <legend>Refresh Page</legend>
+                            <input type = "submit" value = "Refresh"  style="height:50px; width:100px; font-size: 25px">
+                    </fieldset>
+               </form>
+                </H1></body></html>
