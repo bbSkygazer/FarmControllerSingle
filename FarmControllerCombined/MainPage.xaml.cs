@@ -207,8 +207,9 @@ namespace FarmControllerCombined
             private string BuildMyHTMLResponse(string thequery)
             {
                 string htmlresponse = String.Empty;
-            htmlresponse += @"<html><head><title>Farm Controller</title><meta http-equiv=""refresh"" content=""30;URL='/home.htm'""></head><body>";
-            htmlresponse += PumptStatusHTMLResponse();
+                htmlresponse += @"<html><head><title>Farm Controller</title><meta http-equiv=""refresh"" content=""30;URL='/home.htm'""></head><body>";
+                //<meta http-equiv=""refresh"" content=""30;URL='/home.htm'"">
+                htmlresponse += PumptStatusHTMLResponse();
 
 
                 if (webFarmController.isPumpRunning() == false)
@@ -216,13 +217,13 @@ namespace FarmControllerCombined
                 //Duration in Minutes: <input type = ""text"" name = ""Duration"" value = ""20"" style=""height: 50px; width: 100px; font-size: 30px"">
                     htmlresponse +=
                     @"
-                    <form action=""/Start?"" method=""post"">
+                    <form action=""/Start?"" method=""get"">
                            <input type = ""hidden"" name = ""PumpName"" value = ""Pump1"" style=""height: 50px; width: 100px; font-size: 25px""><br>
                             <font color=""black"" size=""7"">Duration : </font>
-                            <Select name =""Duration"" value=""20"" style=""height: 50px; width: 250px; font-size: 30px"">
-                                <option value=""20"">20 Minuties</option>
-                                <option value=""40"">40 Minuties</option>
-                                <option value=""60"">60 Minuties</option>
+                            <Select name =""Duration"" value=""20"" style=""height: 50px; width: 250px; font-size: 50px"">
+                                <option value=""180"">180 Minutes</option>
+                                <option value=""60"">60 Minutes</option>
+                                <option value=""5"">5 Minutes</option>
                             </Select>
                             <input type=""hidden"" name= ""Action"" value=""Start"">
                             <input type = ""submit"" value = ""Start"" style=""height: 75px; width: 300px; font-size: 50px"">
@@ -231,7 +232,7 @@ namespace FarmControllerCombined
                 }
          
                 htmlresponse += @"<br>
-                <form action=""/Stop?"" method=""post"">
+                <form action=""/Stop?"" method=""get"">
                             <input type = ""hidden"" name = ""PumpName"" value = ""Pump1"" style=""height: 50px; width: 100px; font-size: 30px"">
                             <input type=""hidden"" name= ""Action"" value=""Stop"">
                             <input type = ""submit"" value = ""Stop"" style=""height: 75px; width: 300px; font-size: 50px"">
@@ -240,9 +241,11 @@ namespace FarmControllerCombined
                 <br>
                 <br>
 
-                <form action=""/"" method=""GET"">
+                <form action=""/"" method=""get"">
                             <input type = ""submit"" value = ""Refresh"" style=""height: 75px; width: 300px; font-size: 50px"">
                 </form>
+                <br>
+                <a href=""http://192.168.1.240:8080"">Pi3 Management Page</a>
                 ";
          
                 htmlresponse += "</body></html>";
@@ -277,42 +280,54 @@ namespace FarmControllerCombined
 
             private string GetQuery(StringBuilder request)
             {
-            string url;
-            var testGet = request.ToString().Split('\n')[0];
+                string url;
 
-            if (testGet.StartsWith("GET") == true)
-            {
-                url = string.Empty;
-            }
-            else
-            {
-                var b = Regex.Matches(request.ToString(), Environment.NewLine).Count;
-                string[] requestMethod = request.ToString().Split('\n');
-                string c = requestMethod[b];
-                string requestParts = c.Split('\0')[0];
+                string origrequest;
+          
 
-                if (requestParts.Length > 1)
-                {
-                    url = "/?" + requestParts;
-                }
-                else
-                {
-                    url = string.Empty;
-                    pumpaction = string.Empty;
-                    pumpname = string.Empty;
-                    pumpduration = 0;
-
-                }
-            
-
-            }
+                origrequest = request.ToString();
+                var requestLines = origrequest.Split(' ');
+                url = requestLines.Length > 1
+                    ? requestLines[1] : string.Empty;
 
                 var uri = new Uri("http://localhost" + url);
                 var query = uri.Query;
                 return query;
-            }
+            /*
+             *   
+             *   var testGet = request.ToString().Split('\n')[0];
+               if (testGet.StartsWith("GET") == true)
+               {
+                   url = string.Empty;
+               }
+               else
+               {
+                   var b = Regex.Matches(request.ToString(), Environment.NewLine).Count;
+                   string[] requestMethod = request.ToString().Split('\n');
+                   string c = requestMethod[b];
+                   string requestParts = c.Split('\0')[0];
 
-            private void Parse(string stream)
+                   if (requestParts.Length > 1)
+                   {
+                       url = "/?" + requestParts;
+                   }
+                   else
+                   {
+                       url = string.Empty;
+                       pumpaction = string.Empty;
+                       pumpname = string.Empty;
+                       pumpduration = 0;
+                   }
+               }
+
+
+               var uri = new Uri("http://localhost" + url);
+               var query = uri.Query;
+               return query;
+               */
+        }
+
+        private void Parse(string stream)
             {
 
                 string content = stream;

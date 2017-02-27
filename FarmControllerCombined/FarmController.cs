@@ -15,7 +15,7 @@ namespace FarmControllerSpace
         public DateTime PumpEndTime { get; internal set; }
         public DateTime PumpStartTime { get; internal set; }
         public int PumpDuration { get; internal set; }
-        private const int LED_PIN = 3;
+        private const int GPIO_PIN = 3;
         private GpioPin pin;
         private GpioPinValue pinValue;
         private SolidColorBrush redBrush = new SolidColorBrush(Windows.UI.Colors.Red);
@@ -43,7 +43,7 @@ namespace FarmControllerSpace
                 return;
             }
 
-            pin = gpio.OpenPin(LED_PIN);
+            pin = gpio.OpenPin(GPIO_PIN);
             pinValue = GpioPinValue.High;
             pin.Write(pinValue);
             pin.SetDriveMode(GpioPinDriveMode.Output);
